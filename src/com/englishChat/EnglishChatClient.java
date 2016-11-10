@@ -14,6 +14,7 @@ public class EnglishChatClient{
 	private Socket sc = null;
 	private final int port = 5555;
 	private String host = "192.168.16.22";
+	private String name = "";
 
 	public EnglishChatClient(){
 		System.out.println("채팅클라이언트");
@@ -25,6 +26,7 @@ public class EnglishChatClient{
 
 	
 	public void connect(){
+		
 		try {
 			sc = new Socket(host, port);
 		} catch (Exception e) {
