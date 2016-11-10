@@ -8,19 +8,19 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Scanner;
 
-public class ClientTest{
+public class EnglishChatClient{
 
 	private static final long serialVersionUID = -8029413848722483074L;
 	private Socket sc = null;
 	private final int port = 5555;
 	private String host = "192.168.16.22";
 
-	public ClientTest(){
+	public EnglishChatClient(){
 		System.out.println("채팅클라이언트");
 	}
 	
 	public static void main(String[] args) {
-		new ClientTest().connect();
+		new EnglishChatClient().connect();
 	}
 
 	
@@ -42,7 +42,6 @@ class Reader implements Runnable{
 	private Socket sc;
 
 	public Reader(Socket sc) {
-		super();
 		this.sc = sc;
 	}
 	
