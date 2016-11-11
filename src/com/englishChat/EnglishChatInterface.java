@@ -1,7 +1,9 @@
 package com.englishChat;
 
 public interface EnglishChatInterface {
-	public void dictionaryAllInput(EnglishChatData ecd);
-	public void dictionaryPrint(EnglishChatData ecd);
+	public void dictionaryFileInputToTreeMap(EnglishChatData ecd);
+	public void dictionaryWriteToFile(EnglishChatData ecd);
+	public void DictionaryFileInputToMiniTreeMap(EnglishChatData ecd);
+	public void miniDictionaryWriteToFile(EnglishChatData ecd);
 
 }
