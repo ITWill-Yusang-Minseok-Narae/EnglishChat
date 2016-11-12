@@ -1,8 +1,14 @@
-package com.englishChat;
+package com.englishChat.AppLogin;
 
+import java.io.Serializable;
 import java.util.Calendar;
 
-public class EnglishAppLoginVo {
+public class EnglishAppLoginVo implements Serializable{
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	
 	private String id;
 	private String pw1;
@@ -24,7 +30,7 @@ public class EnglishAppLoginVo {
 	}
 	public String printBirth() {
 		return String.format("%4s - %2s - %2s",
-				birth.get(Calendar.YEAR),birth.get(Calendar.MONTH+1),birth.get(Calendar.DATE));
+				birth.get(Calendar.YEAR),birth.get(Calendar.MONTH)+1,birth.get(Calendar.DATE));
 	}
 	
 	
@@ -85,7 +91,7 @@ public class EnglishAppLoginVo {
 	@Override
 	public String toString() {
 
-		return String.format("%s\t %s\t %d", getName(), printBirth(),
+		return String.format("%s %s คำ%d", getName(), printBirth(),
 					getAge());
 	}
 	

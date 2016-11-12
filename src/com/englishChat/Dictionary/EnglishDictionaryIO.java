@@ -1,5 +1,7 @@
-package com.englishChat;
-
+package com.englishChat.Dictionary;
+//20111108
+//Kim Yusang
+//bakkus@daum.net
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -12,10 +14,12 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.TreeMap;
 
-public class EnglishChatDictionaryIO implements EnglishChatInterface{
+import com.englishChat.EnglishChatWord;
+
+public class EnglishDictionaryIO implements EnglishDictionaryInterface{
 
 	@Override
-	public void dictionaryFileInputToTreeMap(EnglishChatData ecd) {
+	public void dictionaryFileInputToTreeMap(EnglishDictionaryData edd) {
 		
 		Comparator<String> comp = new Comparator<String>() {
 			@Override
@@ -85,12 +89,12 @@ public class EnglishChatDictionaryIO implements EnglishChatInterface{
 			return;
 		}
 		System.out.println("TreeMap 입력 끝");
-		ecd.setDictionary(tm);
-		dictionaryWriteToFile(ecd);
+		edd.setDictionary(tm);
+		dictionaryWriteToFile(edd);
 	}
 
 	@Override
-	public void dictionaryWriteToFile(EnglishChatData ecd) { //테스트용
+	public void dictionaryWriteToFile(EnglishDictionaryData edd) { //테스트용
 		
 		FileOutputStream fos;
 		try {
@@ -102,11 +106,11 @@ public class EnglishChatDictionaryIO implements EnglishChatInterface{
 		}
 		PrintStream ps = new PrintStream(fos);
 		
-		Iterator<String> it = ecd.getDictionary().keySet().iterator();
+		Iterator<String> it = edd.getDictionary().keySet().iterator();
 		while (it.hasNext()) {
 			String key = it.next();//키
 			ps.print(key);
-			LinkedList<EnglishChatWord> ll =ecd.getDictionary().get(key);//value
+			LinkedList<EnglishChatWord> ll =edd.getDictionary().get(key);//value
 			Iterator<EnglishChatWord> it2 = ll.listIterator();
 			while (it2.hasNext()) {
 				EnglishChatWord ecw = it2.next();
@@ -131,7 +135,7 @@ public class EnglishChatDictionaryIO implements EnglishChatInterface{
 	}
 
 	@Override
-	public void DictionaryFileInputToMiniTreeMap(EnglishChatData ecd) {
+	public void DictionaryFileInputToMiniTreeMap(EnglishDictionaryData edd) {
 
 		Comparator<String> comp = new Comparator<String>() {
 			@Override
@@ -194,12 +198,12 @@ public class EnglishChatDictionaryIO implements EnglishChatInterface{
 			return;
 		}
 		System.out.println("TreeMap 입력 끝");
-		ecd.setMinidictionary(tm);
-		miniDictionaryWriteToFile(ecd);
+		edd.setMinidictionary(tm);
+		miniDictionaryWriteToFile(edd);
 	}
 
 	@Override
-	public void miniDictionaryWriteToFile(EnglishChatData ecd) {
+	public void miniDictionaryWriteToFile(EnglishDictionaryData edd) {
 		FileOutputStream fos;
 		try {
 			fos = new FileOutputStream("d:\\result.txt");
@@ -210,11 +214,11 @@ public class EnglishChatDictionaryIO implements EnglishChatInterface{
 		}
 		PrintStream ps = new PrintStream(fos);
 		
-		Iterator<String> it = ecd.getMinidictionary().keySet().iterator();
+		Iterator<String> it = edd.getMinidictionary().keySet().iterator();
 		while (it.hasNext()) {
 			String key = it.next();//키
 			ps.print(key);
-			String ddut =ecd.getMinidictionary().get(key);//value			
+			String ddut =edd.getMinidictionary().get(key);//value			
 				if(!ddut.equals(""))					
 					ps.print("/" + ddut);
 			ps.print("\r\n");

@@ -1,16 +1,20 @@
-package com.englishChat;
-
+package com.englishChat.Taja;
+//20111108
+//Kim Yusang
+//bakkus@daum.net
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 
+import com.englishChat.EnglishChatUser;
+
 public class EnglishTajaUserAccept implements Runnable{
 	private Socket sc;
-	EnglishChatData ecd;
+	EnglishTajaData ecd;
 	
-	public EnglishTajaUserAccept(EnglishChatData ecd,Socket sc) {
+	public EnglishTajaUserAccept(EnglishTajaData ecd,Socket sc) {
 		this.ecd = ecd;
 		this.sc = sc;
 	}
