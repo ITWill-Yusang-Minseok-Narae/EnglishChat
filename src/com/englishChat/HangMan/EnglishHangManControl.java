@@ -1,10 +1,11 @@
 package com.englishChat.HangMan;
 
-import java.io.IOException;
 import java.util.Iterator;
 import java.util.Random;
 import java.util.Scanner;
 import java.util.TreeMap;
+
+import com.englishChat.Dictionary.EnglishDictionaryData;
 
 public class EnglishHangManControl {
 
@@ -17,7 +18,7 @@ public class EnglishHangManControl {
 			"기원하다", "태우다", "휘어진", "진창길", "줄기", "비체계적인" };
 
 	String dash, value, mean, alphabet;
-	EnglishChatData ecd = new EnglishChatData();
+	EnglishDictionaryData edd = new EnglishDictionaryData();
 	Random rd = new Random();
 	Scanner sc = new Scanner(System.in);
 	private TreeMap<String, String> tm;
@@ -38,13 +39,13 @@ public class EnglishHangManControl {
 			tm.put(Data[i], Data3[i]);
 
 		}
-		ecd.setMinidictionary(tm);
+		edd.setMinidictionary(tm);
 		// return tm;
 	}
 
 	void print() {// 출력
 
-		tm = ecd.getMinidictionary();
+		tm = edd.getMinidictionary();
 		Iterator<String> it = tm.keySet().iterator();
 
 		while (it.hasNext()) {
@@ -70,7 +71,7 @@ public class EnglishHangManControl {
 	}
 
 	void random() {// 퀴즈 낼 단어를 랜덤으로 고름
-		tm = ecd.getMinidictionary();
+		tm = edd.getMinidictionary();
 		Iterator<String> it = tm.keySet().iterator();
 
 		Object[] values = tm.values().toArray();
