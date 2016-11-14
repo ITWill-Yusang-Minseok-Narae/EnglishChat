@@ -1,8 +1,7 @@
 package com.englishChat.AppLogin;
 
-public class EnglishAppLoginMain {
+public class EnglishAppLoginServerMain {
 	public static void main(String[] args){
-		new EnglishAppLoginControl();
+		new EnglishAppLoginServer();
 	}
 }
-

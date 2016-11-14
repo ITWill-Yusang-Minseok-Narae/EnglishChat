@@ -4,19 +4,17 @@ package com.englishChat.Taja;
 //bakkus@daum.net
 import java.util.ArrayList;
 
-import com.englishChat.EnglishChatUser;
-
 public class EnglishTajaData {
 	
-	public static final int port = 5555;
-	public static final int tajaUserLimit = 2;
+	public static final int tajaServerPort = 5555;
+	public static final int tajaUserLimit = 3;
 	public static final int tajaQuestion = 3;	
-	private ArrayList<EnglishChatUser> clients = new ArrayList<EnglishChatUser>();
+	private ArrayList<EnglishTajaUser> clients = new ArrayList<EnglishTajaUser>();
 
-	public ArrayList<EnglishChatUser> getClients() {
+	public ArrayList<EnglishTajaUser> getClients() {
 		return clients;
 	}
-	public void setClients(ArrayList<EnglishChatUser> clients) {
+	public void setClients(ArrayList<EnglishTajaUser> clients) {
 		this.clients = clients;
 	}
 }

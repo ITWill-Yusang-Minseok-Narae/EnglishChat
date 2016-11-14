@@ -5,9 +5,10 @@ import java.util.Random;
 import java.util.Scanner;
 import java.util.TreeMap;
 
+import com.englishChat.AppLogin.EnglishAppLoginControl;
 import com.englishChat.Dictionary.EnglishDictionaryData;
 
-public class EnglishHangManControl {
+ public class EnglishHangManControl {
 
 	private static final String[] Data = { "abdomen", "bequest", "eversion",
 			"iceberg", "invoke", "kindle", "recurvate", "slush", "stock",
@@ -16,21 +17,20 @@ public class EnglishHangManControl {
 	// "vt.", "adj.", "n.", "n.", "adj." };
 	private static final String[] Data3 = { "복부", "유증", "밖으로 뒤집음", "빙산",
 			"기원하다", "태우다", "휘어진", "진창길", "줄기", "비체계적인" };
-
+	int returnint=0;
 	String dash, value, mean, alphabet;
 	EnglishDictionaryData edd = new EnglishDictionaryData();
 	Random rd = new Random();
 	Scanner sc = new Scanner(System.in);
 	private TreeMap<String, String> tm;
 
-	public EnglishHangManControl(String dash, String mean) {
-
-		this.dash = dash;
-		this.mean = mean;
-		// this.value = value;
+	public EnglishHangManControl() {
+		input();
+		random();
+		play();
 	}
 
-	void input() {// 단어장 데이터 넣기
+	public void input() {// 단어장 데이터 넣기
 
 		TreeMap<String, String> tm = new TreeMap<String, String>();
 
@@ -78,9 +78,9 @@ public class EnglishHangManControl {
 		Object randomValue = values[rd.nextInt(values.length)];
 		// value를 랜덤으로 돌림
 
-		System.out.println("답은");
-		System.out.println("---------------");
-		System.out.println(randomValue);
+		// System.out.println("답은");
+		// System.out.println("---------------");
+		// System.out.println(randomValue);
 
 		// System.out.println(tm.containsValue(randomValue));
 
@@ -89,15 +89,17 @@ public class EnglishHangManControl {
 
 		mean = (String) randomValue;
 		dash = (String) getKeyFromValue(tm, randomValue);
-		System.out.println(dash);
+		// System.out.println(dash);
 		System.out.println("---------------");
-		System.out.println("입니다!^^");
+		// System.out.println("입니다!^^");
 
 	}
 
 	// 행맨을 플레이 함
 	void play() {
 
+		
+		
 		Alphabet al = new Alphabet();
 
 		String[] dash2 = dash.split("");
@@ -121,13 +123,14 @@ public class EnglishHangManControl {
 
 			try {
 				do {
-					alphabet="";
+					alphabet = "";
 					heart = 0;
 					System.out.println();
 					System.out.println("유추할 알파벳을 입력하세요");
-					
+
 					alphabet = sc.nextLine();
-					al.inputFormat(alphabet);//예외처리
+					al.inputFormat(alphabet);
+
 					for (int i = 0; i < dash2.length; i++) {
 						if (dash2[i].equals(alphabet)) {
 							// System.out.println(dash.substring(i, i + 1));
@@ -139,11 +142,11 @@ public class EnglishHangManControl {
 							heart++;
 							count++;
 						}
-						if(heart>1){//만약에 맞춘것이 한번에 2자리면 -1해야함
+						if (heart > 1) {// 만약에 맞춘것이 한번에 2자리면 -1해야함
 							heart--;
 							count--;
 						}
-						
+
 					}
 					if (0 == heart) {
 						hangCount++;
@@ -168,8 +171,10 @@ public class EnglishHangManControl {
 							System.out.println("이번 게임의 승자는 존재하지 않습니다");
 							System.out.printf("정답은 %s : %s 입니다", dash, mean);
 							System.out.println();
-
-							
+							replay();
+							if(returnint==10){
+								return;
+							}
 
 						}
 						if (count == dash2.length) {
@@ -178,68 +183,85 @@ public class EnglishHangManControl {
 							System.out.println("축하합니다 정답을 맞추셨습니다^^");
 							System.out.printf("정답은 %s : %s 입니다", dash, mean);
 							System.out.println();
-
-							
+							replay();
+							if(returnint==10){
+								return;
+							}
 
 						}
-						
-						replay();
-						
+
 					}
 
-				} while (hangCount > 7 || heart == dash2.length);
+				} while (hangCount > 6 || heart == dash2.length);
+				
 
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				System.out.println("잘못된 동작을 하셨습니다1");
-				e.printStackTrace();
+//				// TODO Auto-generated catch block
+//				System.out.println("잘못된 동작을 하셨습니다1");
+//				e.printStackTrace();
 			}
 		}
 	}
 
-	void replay(){
+	public int replay() {
+		returnint=0;
+
 		try {
 			char ch;
 			System.out.println("게임을 계속 하시겠습니까? (y/n)");
 			ch = (char) System.in.read();
 
-			if (ch != 'Y' && ch != 'y') {
-				System.out.println("행맨 게임을 종료합니다");
-				System.exit(0);
-			} else
+			if (ch == 'Y' || ch == 'y') {
+				//return;
+				
+				EnglishHangManMain.main(null);
 
-				random();
-				play();
+			}
+
+			if (ch == 'N' || ch == 'n') {
+				System.out.println("행맨 게임을 종료합니다");
+				returnint=10;
+				
+				
+			} else
+				System.out.println("y키나 n키를 눌러주십시오");
+
 		} catch (Exception e) {
 			System.out.println("잘못된 동작을 하셨습니다2");
+			
+			
 		}
+		return returnint;
+		
+		
+	
 
 	}
 
 	// ------------------------ 예외처리------------------------------
 
-class Alphabet {
-	public void inputFormat(String alphabet) throws Exception {
+	class Alphabet {
+		public void inputFormat(String alphabet) throws Exception {
 
-		if (alphabet.length() > 1) {
-			throw new Exception("1개의 알파벳만 쓰십시오");
-		}
-
-		int eng = 0;
-
-		for (int i = 0; i < alphabet.length(); i++) {
-			char ch = alphabet.charAt(i);
-			if (ch >= 'a' && ch <= 'z') {
-
-				eng++;
-
+			if (alphabet.length() > 1) {
+				throw new Exception("1개의 알파벳만 쓰십시오");
 			}
+
+			int eng = 0;
+
+			for (int i = 0; i < alphabet.length(); i++) {
+				char ch = alphabet.charAt(i);
+				if (ch >= 'a' && ch <= 'z') {
+
+					eng++;
+
+				}
+			}
+			if (eng == 0)
+				throw new Exception("영문자 소문자로 입력해주세요");
+
 		}
-		if (eng == 0)
-			throw new Exception("영문자 소문자로 입력해주세요");
 
 	}
-
-}
 
 }

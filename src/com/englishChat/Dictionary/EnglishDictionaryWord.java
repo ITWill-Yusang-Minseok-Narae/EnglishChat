@@ -1,6 +1,6 @@
-package com.englishChat;
+package com.englishChat.Dictionary;
 
-public class EnglishChatWord {
+public class EnglishDictionaryWord {
 	private String josa;
 	private String ddut;
 	

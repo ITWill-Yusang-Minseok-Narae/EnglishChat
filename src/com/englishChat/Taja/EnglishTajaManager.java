@@ -7,9 +7,8 @@ import java.io.PrintWriter;
 import java.util.Iterator;
 import java.util.Random;
 
-import com.englishChat.EnglishChatUser;
-import com.englishChat.EnglishChatWord;
 import com.englishChat.Dictionary.EnglishDictionaryData;
+import com.englishChat.Dictionary.EnglishDictionaryWord;
 
 public class EnglishTajaManager implements Runnable {
 	EnglishTajaData etd;
@@ -28,10 +27,11 @@ public class EnglishTajaManager implements Runnable {
 		chatBroadcast(msg);
 		int userConnects = etd.getClients().size();
 		msg = String.format("초기 userConnects : %d", userConnects);
-		chatBroadcast(msg);				
+		chatBroadcast(msg);
+		boolean loop = true;
 		while (true) {
-			msg = String.format("ecd.getClients().size() : %d", etd.getClients().size());
-			chatBroadcast(msg);
+//			msg = String.format("ecd.getClients().size() : %d", etd.getClients().size());
+//			chatBroadcast(msg);
 			try {
 				Thread.sleep(1000);
 			} catch (InterruptedException e) {
@@ -60,14 +60,14 @@ public class EnglishTajaManager implements Runnable {
 						chatBroadcast(msg);
 						boolean userCheckStatus = true;
 						while(userCheckStatus){
-							Iterator<EnglishChatUser> it = etd.getClients().listIterator();
+							Iterator<EnglishTajaUser> it = etd.getClients().listIterator();
 							while (it.hasNext()) {
-								EnglishChatUser ecu = it.next();
-								Iterator<EnglishChatWord> it2 = edd.getDictionary().get(randomKey).listIterator();
+								EnglishTajaUser ecu = it.next();
+								Iterator<EnglishDictionaryWord> it2 = edd.getDictionary().get(randomKey).listIterator();
 								while (it2.hasNext()) {
-									EnglishChatWord ecw = it2.next();
+									EnglishDictionaryWord ecw = it2.next();
 									if (ecw.getDdut().equals(ecu.getAnswer())){
-										msg = String.format("%s가 맞췄습니다.",	ecu.getIp());
+										msg = String.format("%s가 맞췄습니다.",	ecu.getName());
 										chatBroadcast(msg);
 										ecu.setGamePoint(ecu.getGamePoint()+1);
 										userCheckStatus = false;
@@ -82,28 +82,29 @@ public class EnglishTajaManager implements Runnable {
 					}
 					msg = "게임 결과";
 					chatBroadcast(msg);
-					Iterator<EnglishChatUser> it = etd.getClients().listIterator();
+					Iterator<EnglishTajaUser> it = etd.getClients().listIterator();
 					while (it.hasNext()) {
-						EnglishChatUser ecu = it.next();
-						msg = String.format("%s : %d 점", ecu.getIp(), ecu.getGamePoint());
+						EnglishTajaUser ecu = it.next();
+						msg = String.format("%s : %d 점", ecu.getName(), ecu.getGamePoint());
 						chatBroadcast(msg);
 					}
+					loop = false;
 				}
 			}
 		}
 	}
 
 	private void allSetGameMode(boolean gameMode) {
-		Iterator<EnglishChatUser> it = etd.getClients().listIterator();
+		Iterator<EnglishTajaUser> it = etd.getClients().listIterator();
 		while (it.hasNext()) {
-			EnglishChatUser ecu = it.next();
+			EnglishTajaUser ecu = it.next();
 			ecu.setGameMode(gameMode);
 		}
 	}
 
 	private void chatBroadcast(String msg) {
 		// 나를 제외한 모두
-		for (EnglishChatUser ecu : etd.getClients()) {
+		for (EnglishTajaUser ecu : etd.getClients()) {
 			PrintWriter pw = null;
 			try {
 				pw = new PrintWriter(ecu.getSc().getOutputStream(), true);

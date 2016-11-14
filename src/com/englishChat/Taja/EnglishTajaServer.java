@@ -9,19 +9,27 @@ import com.englishChat.Dictionary.EnglishDictionaryData;
 import com.englishChat.Dictionary.EnglishDictionaryIO;
 
 public class EnglishTajaServer {
-	private Socket sc;
+	private EnglishTajaData etd = null;
+	private EnglishDictionaryData edd = null;
+	private Socket sc = null;
+	private Thread tajaManager = null;
 	
-	public void serverStart(EnglishTajaData etd, EnglishDictionaryData edd){
+	public EnglishTajaServer() {
+		this.etd = new EnglishTajaData();
+		this.edd = new EnglishDictionaryData();
+		serverStart();
+	}
+
+	public void serverStart(){
 		new EnglishDictionaryIO().dictionaryFileInputToTreeMap(edd);
 		try {
-			ServerSocket ss = new ServerSocket(EnglishTajaData.port);
+			ServerSocket ss = new ServerSocket(EnglishTajaData.tajaServerPort);
 			System.out.println("서버시작...");
-			Thread manager = new Thread(new EnglishTajaManager(etd,edd));
-			manager.start();
+			tajaManagerStart();
 			while (true) {
 				if (etd.getClients().size()<=EnglishTajaData.tajaUserLimit){
-					setSc(ss.accept());
-					Thread userAccept = new Thread(new EnglishTajaUserAccept(etd,sc));
+					sc=ss.accept();
+					Thread userAccept = new Thread(new EnglishTajaUserAccept(this,etd,sc));
 					userAccept.start();	
 				}
 			}
@@ -29,22 +37,18 @@ public class EnglishTajaServer {
 			System.out.println(e.toString());
 		}
 	}
-
-	public Socket getSc() {
-		return sc;
+	
+	public boolean tajaManagerStart(){
+		if(tajaManager==null){
+			tajaManager = new Thread(new EnglishTajaManager(etd,edd));
+			tajaManager.start();
+			return true;
+		}else if (tajaManager.isAlive())
+			return false;
+			else{
+				tajaManager = new Thread(new EnglishTajaManager(etd,edd));
+				tajaManager.start();
+				return true;
+			}
 	}
-
-	public void setSc(Socket sc) {
-		this.sc = sc;
-	}
-	
-	
-	
-	public static void main(String[] args) {
-		EnglishTajaServer ob = new EnglishTajaServer();
-		EnglishTajaData etd = new EnglishTajaData();
-		EnglishDictionaryData edd = new EnglishDictionaryData();
-		ob.serverStart(etd,edd);
-	}
-	
 }

@@ -5,19 +5,17 @@ package com.englishChat.Dictionary;
 import java.util.LinkedList;
 import java.util.TreeMap;
 
-import com.englishChat.EnglishChatWord;
-
 public class EnglishDictionaryData {
 
-	private TreeMap<String, LinkedList<EnglishChatWord>> dictionary;
+	private TreeMap<String, LinkedList<EnglishDictionaryWord>> dictionary;
 	private TreeMap<String, String> minidictionary;
 
-	public TreeMap<String, LinkedList<EnglishChatWord>> getDictionary() {
+	public TreeMap<String, LinkedList<EnglishDictionaryWord>> getDictionary() {
 		return dictionary;
 	}
 
 	public void setDictionary(
-			TreeMap<String, LinkedList<EnglishChatWord>> dictionary) {
+			TreeMap<String, LinkedList<EnglishDictionaryWord>> dictionary) {
 		this.dictionary = dictionary;
 	}
 

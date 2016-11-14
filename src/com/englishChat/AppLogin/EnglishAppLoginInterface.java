@@ -8,7 +8,7 @@ public interface EnglishAppLoginInterface {
 	public void delete();//탈퇴
 	public void save();// 회원아이디 저장하기(직렬화)
 	public void load(); //회원아이디 가져오기(역직렬화)
-	public void adimlogin();//관리자 로그인
+	public void admlogin();//관리자 로그인
 	
 	
 }

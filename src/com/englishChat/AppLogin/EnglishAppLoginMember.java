@@ -3,7 +3,7 @@ package com.englishChat.AppLogin;
 import java.io.Serializable;
 import java.util.Calendar;
 
-public class EnglishAppLoginVo implements Serializable{
+public class EnglishAppLoginMember implements Serializable{
 	
 	/**
 	 * 
@@ -71,10 +71,6 @@ public class EnglishAppLoginVo implements Serializable{
 	public void setName(String name) {
 		this.name = name;
 	}
-	
-	
-	
-	
 	public String getEmail() {
 		return email;
 	}
@@ -87,13 +83,9 @@ public class EnglishAppLoginVo implements Serializable{
 	public void setTel(int tel) {
 		this.tel = tel;
 	}
-	
 	@Override
 	public String toString() {
 
-		return String.format("%s %s คำ%d", getName(), printBirth(),
-					getAge());
+		return String.format("%s %s คำ%d", getName(), printBirth(),	getAge());
 	}
-	
-
 }

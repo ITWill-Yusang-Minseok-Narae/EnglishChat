@@ -14,10 +14,16 @@ public class EnglishBlinkData {
 		return wordbook;
 	}
 
-	public void setWordbook(TreeMap<String, String> wordbook) {
-		this.wordbook = wordbook;
+	public void setWordbook1(TreeMap<String, String> wordbook1) {
+		
+		this.wordbook = wordbook1;
+		
 	}
-
+	public void setWordbook2(TreeMap<String, String> wordbook2) {
+		
+		this.wordbook = wordbook2;
+		
+	}
 	public String[] getEw() {
 		return ew;
 	}

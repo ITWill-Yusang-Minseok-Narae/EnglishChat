@@ -14,9 +14,9 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.TreeMap;
 
-import com.englishChat.EnglishChatWord;
-
 public class EnglishDictionaryIO implements EnglishDictionaryInterface{
+	
+	private final String filePath = "d:\\java\\work\\EnglishChat\\한영사전20161109.txt";
 
 	@Override
 	public void dictionaryFileInputToTreeMap(EnglishDictionaryData edd) {
@@ -34,11 +34,11 @@ public class EnglishDictionaryIO implements EnglishDictionaryInterface{
 			}
 		};
 		
-		TreeMap<String, LinkedList<EnglishChatWord>> tm = new TreeMap<String, LinkedList<EnglishChatWord>>(comp);
+		TreeMap<String, LinkedList<EnglishDictionaryWord>> tm = new TreeMap<String, LinkedList<EnglishDictionaryWord>>(comp);
 
 		FileInputStream fis;
 		try {
-			fis = new FileInputStream("d:\\java\\work\\EnglishChat\\한영사전20161109.txt");
+			fis = new FileInputStream(filePath);
 		} catch (FileNotFoundException e) {
 			System.out.println("파일을 못열었습니다");
 			e.printStackTrace();
@@ -51,9 +51,9 @@ public class EnglishDictionaryIO implements EnglishDictionaryInterface{
 			while ((str=br.readLine())!=null){
 				String[] ss = str.split("/");
 				String key = ss[0];
-				LinkedList<EnglishChatWord> ll = new LinkedList<EnglishChatWord>();
+				LinkedList<EnglishDictionaryWord> ll = new LinkedList<EnglishDictionaryWord>();
 				for (int i = 1; i < ss.length;) {
-					EnglishChatWord ecw = new EnglishChatWord();
+					EnglishDictionaryWord ecw = new EnglishDictionaryWord();
 					if(ss[i].equals("a.")||ss[i].equals("ad.")||ss[i].equals("adj.")||ss[i].equals("b.")||ss[i].equals("int.")||ss[i].equals("n.")||ss[i].equals("pref.")||ss[i].equals("v.")||ss[i].equals("vi.")||ss[i].equals("vt."))
 						ecw.setJosa(ss[i++]);
 					else
@@ -74,9 +74,9 @@ public class EnglishDictionaryIO implements EnglishDictionaryInterface{
 					ll.add(ecw);
 				}
 				if (tm.get(key) != null){
-					Iterator<EnglishChatWord> it = ll.listIterator();
+					Iterator<EnglishDictionaryWord> it = ll.listIterator();
 					while (it.hasNext()) {
-						EnglishChatWord ecw = it.next();
+						EnglishDictionaryWord ecw = it.next();
 						tm.get(key).add(ecw);
 					}
 				}
@@ -90,7 +90,7 @@ public class EnglishDictionaryIO implements EnglishDictionaryInterface{
 		}
 		System.out.println("TreeMap 입력 끝");
 		edd.setDictionary(tm);
-		dictionaryWriteToFile(edd);
+//		dictionaryWriteToFile(edd);
 	}
 
 	@Override
@@ -98,7 +98,7 @@ public class EnglishDictionaryIO implements EnglishDictionaryInterface{
 		
 		FileOutputStream fos;
 		try {
-			fos = new FileOutputStream("d:\\result.txt");
+			fos = new FileOutputStream("c:\\result.txt");
 		} catch (FileNotFoundException e) {
 			System.out.println("파일 생성을 못했습니다");
 			e.printStackTrace();
@@ -110,10 +110,10 @@ public class EnglishDictionaryIO implements EnglishDictionaryInterface{
 		while (it.hasNext()) {
 			String key = it.next();//키
 			ps.print(key);
-			LinkedList<EnglishChatWord> ll =edd.getDictionary().get(key);//value
-			Iterator<EnglishChatWord> it2 = ll.listIterator();
+			LinkedList<EnglishDictionaryWord> ll =edd.getDictionary().get(key);//value
+			Iterator<EnglishDictionaryWord> it2 = ll.listIterator();
 			while (it2.hasNext()) {
-				EnglishChatWord ecw = it2.next();
+				EnglishDictionaryWord ecw = it2.next();
 				if(!ecw.getJosa().equals(""))
 					ps.print("/" + ecw.getJosa());
 				if(!ecw.getDdut().equals(""))

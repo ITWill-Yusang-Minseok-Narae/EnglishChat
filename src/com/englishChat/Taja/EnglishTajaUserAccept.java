@@ -4,67 +4,119 @@ package com.englishChat.Taja;
 //bakkus@daum.net
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
 import java.io.PrintWriter;
 import java.net.Socket;
-
-import com.englishChat.EnglishChatUser;
+import java.util.Iterator;
 
 public class EnglishTajaUserAccept implements Runnable{
-	private Socket sc;
-	EnglishTajaData ecd;
+	private Socket sk;
+	EnglishTajaServer ets;
+	EnglishTajaData etd;
 	
-	public EnglishTajaUserAccept(EnglishTajaData ecd,Socket sc) {
-		this.ecd = ecd;
-		this.sc = sc;
+	public EnglishTajaUserAccept(EnglishTajaServer ets, EnglishTajaData etd,Socket sk) {
+		this.ets = ets;
+		this.etd = etd;
+		this.sk = sk;
 	}
 	
 	@Override
 	public void run() {
-		String ip = sc.getInetAddress().getHostAddress();
+		String clientIp = sk.getInetAddress().getHostAddress();
 		String msg = null;
-		BufferedReader br;
+		BufferedReader br = null;
+		InputStream is = null;
+		InputStreamReader isr = null;
+		ObjectInputStream ois = null;
+		EnglishTajaUser etu = null;
+		String userName = null;
 		
 		try {
-			br = new BufferedReader(new InputStreamReader(sc.getInputStream()));
+			is = sk.getInputStream();
 		} catch (IOException e) {
-			memberExitProcess(ip);
-			return;
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-		
-		//접속한 client(sc)를 저장
-		EnglishChatUser ecu = new EnglishChatUser();
-		ecu.setIp(ip);
-		ecu.setSc(sc);
-		ecd.getClients().add(ecu);
-		msg = String.format("ecd.getClients().size() : %d", ecd.getClients().size());
+		try {
+			ois = new ObjectInputStream(is);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		try {
+			userName = (String) ois.readObject();
+		} catch (ClassNotFoundException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+//		try {
+//			ois.close();
+//		} catch (IOException e1) {
+//			// TODO Auto-generated catch block
+//			e1.printStackTrace();
+//		}
+		etu = new EnglishTajaUser();
+		etu.setName(userName);
+		etu.setIp(clientIp);
+		etu.setSc(sk);
+		isr = new InputStreamReader(is);
+		br = new BufferedReader(isr);
+		//접속한 client(sk)를 저장
+		etd.getClients().add(etu);
+		msg = String.format("ecd.getClients().size() : %d", etd.getClients().size());
 		chatBroadcast(msg);				
 		
 		//다른 client에게 접속사실을 알림
-		msg = ip + "]가 접속했습니다.";
+		msg = etu.getName() + "]가 접속했습니다. ip=" + etu.getIp();
 		chatBroadcast(msg);
 		try {
 			while ((msg=br.readLine())!=null) {
-				if (ecu.isGameMode()) 
-					ecu.setAnswer(msg.substring(msg.indexOf(']')+1));
+				if (etu.isGameMode()) 
+					etu.setAnswer(msg.substring(msg.indexOf(']')+1));
+//				ets.tajaManagerStart();
+//				if (msg.equals("tajamanager"))
+//					if(ets.tajaManagerStart())
+//						chatBroadcast("타자매니저시작");
+//					else
+//						chatBroadcast("타자매니저실행중입니다");
+//				if (msg.equals("exit")){
+//					chatBroadcast(msg+"*");
+//					memberExitProcess(etu);
+//				}
 				chatBroadcast(msg);
 			}
 		} catch (IOException e) {
-			memberExitProcess(ip);
+			memberExitProcess(etu);
 			return;
 		}
 	}
 	
-	private void memberExitProcess(String ip){
-		String msg = ip + "]가 퇴장했습니다.";
+	private void memberExitProcess(EnglishTajaUser etu){
+		String msg = etu.getName() + "]가 퇴장했습니다. ip=" + etu.getIp();
 		chatBroadcast(msg);
-			sc = null;
+		Iterator<EnglishTajaUser> it = etd.getClients().listIterator();
+		while (it.hasNext()) {
+			EnglishTajaUser etu1 = (EnglishTajaUser) it.next();
+			if(etu1.getName().equals(etu.getName()))
+				etd.getClients().remove(etu1);
+		}
+		try {
+			sk.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	private void chatBroadcast(String msg){
 		//나를 제외한 모두
-		for (EnglishChatUser ecu : ecd.getClients()) {
-			if(ecu.getSc()==sc)
+		for (EnglishTajaUser ecu : etd.getClients()) {
+			if(ecu.getSc()==sk)
 				continue;//pass
 			PrintWriter pw = null;
 			try {
